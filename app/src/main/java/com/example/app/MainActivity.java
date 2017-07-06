@@ -1,9 +1,12 @@
 package com.example.app;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.GeolocationPermissions;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -26,14 +29,32 @@ public class MainActivity extends Activity {
         // Enable Javascript
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setGeolocationEnabled(true);
+//
+//        mWebView.getSettings().setDatabaseEnabled(true);
+//        mWebView.getSettings().setDomStorageEnabled(true);
+//        mWebView.getSettings().setAppCacheEnabled(true);
+
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+                callback.invoke(origin, true, false);
+            }
+        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
 
         // Use remote resource
-        // mWebView.loadUrl("http://example.com");
-
+         mWebView.loadUrl("https://test.goodoc.co.kr/hospitals?funnel=shinhan_fan");
+//
         // Stop local links and redirects from opening in browser instead of WebView
         // mWebView.setWebViewClient(new MyAppWebViewClient());
 
         // Use local resource
+
+
+
         // mWebView.loadUrl("file:///android_asset/www/index.html");
     }
 
